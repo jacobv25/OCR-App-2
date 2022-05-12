@@ -1,0 +1,21 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-ocrapplication2-dev-201736-authRole",
+      "UnauthRoleArn": "arn:aws:iam::209591288550:role/amplify-ocrapplication2-dev-201736-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::209591288550:role/amplify-ocrapplication2-dev-201736-authRole",
+      "Region": "us-west-1",
+      "DeploymentBucketName": "amplify-ocrapplication2-dev-201736-deployment",
+      "UnauthRoleName": "amplify-ocrapplication2-dev-201736-unauthRole",
+      "StackName": "amplify-ocrapplication2-dev-201736",
+      "StackId": "arn:aws:cloudformation:us-west-1:209591288550:stack/amplify-ocrapplication2-dev-201736/3fe592a0-cdb4-11ec-b704-0655d9c6878b",
+      "AmplifyAppId": "d2aavrgyqbitre"
+    },
+    "categories": {
+      "auth": {
+        "ocrapplication2e508022f": {},
+        "true": {}
+      }
+    }
+  }
+}

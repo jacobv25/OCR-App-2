@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">OCR App 2</string>
+    <string name="tip">Press on the box below to pick an image!</string>
+    <string name="image_file_name">current</string>
+    <string name="provider_package">.com.example.ocrapp2.imagepicker.provider</string>
+    <string name="wrong_authority">FileProvider not declared or has wrong authority. (Must be ${applicationId}.com.example.ocrapp2.imagepicker.provider, check your AndroidManifest.xml)</string>
+    <string name="image_content_type">image/*</string>
+    <string name="video_content_type">video/*</string>
+    <string name="gallery_app_not_found">Gallery app not found.</string>
+
+</resources>
