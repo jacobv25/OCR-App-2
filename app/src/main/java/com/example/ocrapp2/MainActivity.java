@@ -20,19 +20,23 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static String imageFileName = "ocrapp2-capture";
+    public static final String DEFAULT_BUCKET = "ocrapplication2fc15f311960a489aa9941e0426f2916d201736-dev";
+    public static final String DEFAULT_DOCUMENT = "public/ocrapp2-capture.png";
+
+    private static String phoneImageFileName = "ocrapp2-capture";
     private static String s3imageFileName = "ocrapp2-capture.png";
     private ImageView imageView;
-    private Button gallery;
-    private Bitmap bitmap;
+    private Button galleryButton;
+    private Bitmap imageBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        gallery = findViewById(R.id.gallery);
-        gallery.setOnClickListener(new View.OnClickListener() {
+        imageView = findViewById(R.id.imageView);
+        galleryButton = findViewById(R.id.gallery);
+        galleryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -42,22 +46,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Code that is run when image is picked.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-        if(resultCode == RESULT_OK && data != null){
+        if(imageIsPickedSuccessfully(resultCode, data)){
             Uri selectedImage = data.getData();
-            imageView = findViewById(R.id.imageView);
             imageView.setImageURI(selectedImage);
             try {
-                bitmap = getBitmapFromSelectedImage(selectedImage);
-                File imageFile = convertToPNGAndSave(bitmap);
-                sendImageToS3(imageFile);
-;            } catch (IOException e) {
+                imageBitmap = getBitmapFromSelectedImage(selectedImage);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
+            File imageFile = convertToPNGAndSave(imageBitmap);
+            sendImageToS3(imageFile);
+;
 
         }
+    }
+
+    private boolean imageIsPickedSuccessfully(int resultCode, Intent data) {
+        return resultCode == RESULT_OK && data != null;
     }
 
     private Bitmap getBitmapFromSelectedImage(Uri selectedImage) throws IOException {
@@ -82,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         File imageFile = null;
         try {
             imageFile = File.createTempFile(
-                    imageFileName,  /* prefix */
+                    phoneImageFileName,  /* prefix */
                     ".png",         /* suffix */
                     storageDir      /* directory */
             );
