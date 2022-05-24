@@ -16,12 +16,18 @@ public class S3_Communicator {
 
     public void uploadCSV(File csvFile, String fileName) {
         Log.i("UPLOADING FILE", "uploading file");
-
+        Toaster toaster = new Toaster();
         Amplify.Storage.uploadFile(
                 fileName,
                 csvFile,
-                result -> Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey()),
-                storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
+                result -> {
+                    Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey());
+                    toaster.displayToast(2);
+                },
+                storageFailure -> {
+                    Log.e("MyAmplifyApp", "Upload failed", storageFailure);
+                    toaster.displayToast(3);
+                }
         );
     }
 
@@ -29,14 +35,19 @@ public class S3_Communicator {
         Log.i("UPLOADING FILE", "uploading file");
 
         TextractCommunicator textractCommunicator = new TextractCommunicator();
+        Toaster toaster = new Toaster();
         Amplify.Storage.uploadFile(
                 fileName,
                 imageFile,
                 result -> {
                     Log.i("MyAmplifyApp", "Successfully uploaded: " + result.getKey());
+                    toaster.displayToast(0);
                     textractCommunicator.escapeHatch();
                 },
-                storageFailure -> Log.e("MyAmplifyApp", "Upload failed", storageFailure)
+                storageFailure -> {
+                    Log.e("MyAmplifyApp", "Upload failed", storageFailure);
+                    toaster.displayToast(1);
+                }
         );
     }
 

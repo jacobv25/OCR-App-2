@@ -1,5 +1,6 @@
 package com.example.ocrapp2;
 
+import static com.amazonaws.mobile.auth.core.internal.util.ThreadUtils.runOnUiThread;
 import static com.amazonaws.regions.Regions.US_WEST_1;
 
 import androidx.annotation.NonNull;
@@ -39,13 +40,21 @@ public class TextractCommunicator {
             @Override
             public void run() {
                 try {
-                    //Your code goes here
                     AnalyzeDocumentResult result = _client.analyzeDocument(_request);
-
                     List<Block> blocks = result.getBlocks();
                     dataMap = convertDataToFinalHashMap(blocks);
                     System.out.println("-----PRINTING HASHMAP-----");
                     System.out.println(dataMap);
+                    //make toast in UI thread
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toaster toaster = new Toaster();
+                            toaster.displayToast("Textract Successful\n" +
+                                    dataMap.toString());
+                        }
+                    });
+
                     System.out.println("-----writing file external storage-----");
                     CSV_Writer csv_writer = new CSV_Writer();
                     HashMap<String, String[]> finalDataMap = csv_writer.createDataMap(dataMap);

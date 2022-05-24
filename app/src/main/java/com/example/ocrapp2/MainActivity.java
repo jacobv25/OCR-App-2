@@ -2,6 +2,7 @@ package com.example.ocrapp2;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,9 +10,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,17 +26,18 @@ public class MainActivity extends AppCompatActivity {
     public static final String DEFAULT_BUCKET = "ocrapplication2fc15f311960a489aa9941e0426f2916d201736-dev";
     public static final String DEFAULT_DOCUMENT = "public/ocrapp2-capture.png";
 
-    private static String phoneImageFileName = "ocrapp2-capture";
-    private static String s3imageFileName = "ocrapp2-capture.png";
+    public static final String phoneImageFileName = "ocrapp2-capture";
+    public static final String s3imageFileName = "ocrapp2-capture.png";
     private ImageView imageView;
     private Button galleryButton;
     private Bitmap imageBitmap;
+    private static Context applicationContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        applicationContext = getApplicationContext();
         imageView = findViewById(R.id.imageView);
         galleryButton = findViewById(R.id.gallery);
         galleryButton.setOnClickListener(new View.OnClickListener() {
@@ -45,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
     /**
      * Code that is run when image is picked.
      */
@@ -62,8 +65,6 @@ public class MainActivity extends AppCompatActivity {
             }
             File imageFile = convertToPNGAndSave(imageBitmap);
             sendImageToS3(imageFile);
-;
-
         }
     }
 
@@ -86,7 +87,12 @@ public class MainActivity extends AppCompatActivity {
         s3Communicator.uploadImage(imageFile, s3imageFileName);
     }
 
-    public static File convertToPNGAndSave(Bitmap image) {
+
+    public static Context getAppContext() {
+        return applicationContext;
+    }
+
+    private File convertToPNGAndSave(Bitmap image) {
 
         File storageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES);
